@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
-    <version>2.0</version>
-    <date>2014-01-31T17:21:05Z</date>
+    <version>6.0</version>
+    <date>2024-01-05T20:19:14Z</date>
     <groups>
         <group>
+            <uuid>9ffef3661c824d5da1bf0381aaf01061</uuid>
             <name>Draytek</name>
         </group>
         <group>
+            <uuid>f3a129087ddc44579c9b4a2438a8bace</uuid>
             <name>santanamobile</name>
         </group>
         <group>
+            <uuid>7df96b18c230490a9a0a9e2307226338</uuid>
             <name>Templates</name>
         </group>
     </groups>
     <templates>
         <template>
+            <uuid>1cf50b1925ed4b6986e7d9b76b126a33</uuid>
             <template>Draytek_Vigor3300v</template>
             <name>Draytek_Vigor3300v</name>
             <groups>
@@ -28,830 +32,424 @@
                     <name>Templates</name>
                 </group>
             </groups>
-            <applications>
-                <application>
-                    <name>General</name>
-                </application>
-                <application>
-                    <name>Network</name>
-                </application>
-            </applications>
             <items>
                 <item>
-                    <name>LAN Status</name>
-                    <type>1</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                    <multiplier>0</multiplier>
-                    <snmp_oid>.1.3.6.1.2.1.2.2.1.8.1</snmp_oid>
-                    <key>ifOperStatus.1</key>
+                    <uuid>838b2f7b00f7413c83b59507389d9f03</uuid>
+                    <name>ping</name>
+                    <type>SIMPLE</type>
+                    <key>icmpping</key>
                     <delay>30</delay>
-                    <history>90</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>Network</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
+                    <history>7d</history>
+                    <triggers>
+                        <trigger>
+                            <uuid>218949a819b0427c9d3c4e953205a7fc</uuid>
+                            <expression>max(/Draytek_Vigor3300v/icmpping,90s)=0</expression>
+                            <name>{HOSTNAME} is unreachable</name>
+                            <priority>DISASTER</priority>
+                        </trigger>
+                    </triggers>
                 </item>
                 <item>
+                    <uuid>0b691e1abd174e3b9ce0966e0321a92c</uuid>
                     <name>LAN Traffic IN</name>
-                    <type>1</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                    <multiplier>0</multiplier>
+                    <type>SNMP_AGENT</type>
                     <snmp_oid>.1.3.6.1.2.1.2.2.1.10.1</snmp_oid>
                     <key>ifInOctects.1</key>
                     <delay>30</delay>
-                    <history>30</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
+                    <history>30d</history>
                     <units>Bps</units>
-                    <delta>1</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>Network</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
+                    <preprocessing>
+                        <step>
+                            <type>CHANGE_PER_SECOND</type>
+                            <parameters>
+                                <parameter/>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Network</value>
+                        </tag>
+                    </tags>
                 </item>
                 <item>
-                    <name>LAN Traffic OUT</name>
-                    <type>1</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                    <multiplier>0</multiplier>
-                    <snmp_oid>.1.3.6.1.2.1.2.2.1.16.1</snmp_oid>
-                    <key>ifOutOctects.1</key>
-                    <delay>30</delay>
-                    <history>30</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units>Bps</units>
-                    <delta>1</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>Network</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
-                </item>
-                <item>
-                    <name>ping</name>
-                    <type>3</type>
-                    <snmp_community/>
-                    <multiplier>0</multiplier>
-                    <snmp_oid/>
-                    <key>icmpping</key>
-                    <delay>30</delay>
-                    <history>7</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications/>
-                    <valuemap/>
-                </item>
-                <item>
-                    <name>Uptime</name>
-                    <type>1</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                    <multiplier>1</multiplier>
-                    <snmp_oid>.1.3.6.1.2.1.1.3.0</snmp_oid>
-                    <key>sysUpTimeInstance</key>
-                    <delay>30</delay>
-                    <history>90</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>0</value_type>
-                    <allowed_hosts/>
-                    <units>uptime</units>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>0.01</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>General</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
-                </item>
-                <item>
-                    <name>WAN1 Status</name>
-                    <type>1</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                    <multiplier>0</multiplier>
-                    <snmp_oid>.1.3.6.1.2.1.2.2.1.8.5</snmp_oid>
-                    <key>ifOperStatus.5</key>
-                    <delay>30</delay>
-                    <history>90</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>Network</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
-                </item>
-                <item>
+                    <uuid>14be3140c89d4713940f941d2af115b9</uuid>
                     <name>WAN1 Traffic IN</name>
-                    <type>1</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                    <multiplier>0</multiplier>
+                    <type>SNMP_AGENT</type>
                     <snmp_oid>.1.3.6.1.2.1.2.2.1.10.5</snmp_oid>
                     <key>ifInOctects.5</key>
                     <delay>30</delay>
-                    <history>30</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
+                    <history>30d</history>
                     <units>Bps</units>
-                    <delta>1</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>Network</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
+                    <preprocessing>
+                        <step>
+                            <type>CHANGE_PER_SECOND</type>
+                            <parameters>
+                                <parameter/>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Network</value>
+                        </tag>
+                    </tags>
                 </item>
                 <item>
-                    <name>WAN1 Traffic OUT</name>
-                    <type>1</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                    <multiplier>0</multiplier>
-                    <snmp_oid>.1.3.6.1.2.1.2.2.1.16.5</snmp_oid>
-                    <key>ifOutOctects.5</key>
-                    <delay>30</delay>
-                    <history>30</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units>Bps</units>
-                    <delta>1</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>Network</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
-                </item>
-                <item>
-                    <name>WAN2 Status</name>
-                    <type>1</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                    <multiplier>0</multiplier>
-                    <snmp_oid>.1.3.6.1.2.1.2.2.1.8.6</snmp_oid>
-                    <key>ifOperStatus.6</key>
-                    <delay>30</delay>
-                    <history>90</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>0</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>Network</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
-                </item>
-                <item>
+                    <uuid>5cb993bfcd114dbd9cee9333fab07f82</uuid>
                     <name>WAN2 Traffic IN</name>
-                    <type>1</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                    <multiplier>0</multiplier>
+                    <type>SNMP_AGENT</type>
                     <snmp_oid>.1.3.6.1.2.1.2.2.1.10.6</snmp_oid>
                     <key>ifInOctects.6</key>
                     <delay>30</delay>
-                    <history>30</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
+                    <history>30d</history>
                     <units>Bps</units>
-                    <delta>1</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>0</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>Network</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
+                    <preprocessing>
+                        <step>
+                            <type>CHANGE_PER_SECOND</type>
+                            <parameters>
+                                <parameter/>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Network</value>
+                        </tag>
+                    </tags>
                 </item>
                 <item>
-                    <name>WAN2 Traffic OUT</name>
-                    <type>1</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                    <multiplier>0</multiplier>
-                    <snmp_oid>.1.3.6.1.2.1.2.2.1.16.6</snmp_oid>
-                    <key>ifOutOctects.6</key>
-                    <delay>30</delay>
-                    <history>30</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units>Bps</units>
-                    <delta>1</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>0</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>Network</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
-                </item>
-                <item>
-                    <name>WAN3 Status</name>
-                    <type>1</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                    <multiplier>0</multiplier>
-                    <snmp_oid>.1.3.6.1.2.1.2.2.1.8.7</snmp_oid>
-                    <key>ifOperStatus.7</key>
-                    <delay>30</delay>
-                    <history>90</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>0</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>Network</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
-                </item>
-                <item>
+                    <uuid>f393821fa47f478987301dcfab49f1a0</uuid>
                     <name>WAN3 Traffic IN</name>
-                    <type>1</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                    <multiplier>0</multiplier>
+                    <type>SNMP_AGENT</type>
                     <snmp_oid>.1.3.6.1.2.1.2.2.1.10.7</snmp_oid>
                     <key>ifInOctects.7</key>
                     <delay>30</delay>
-                    <history>30</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
+                    <history>30d</history>
                     <units>Bps</units>
-                    <delta>1</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>0</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>Network</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
+                    <preprocessing>
+                        <step>
+                            <type>CHANGE_PER_SECOND</type>
+                            <parameters>
+                                <parameter/>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Network</value>
+                        </tag>
+                    </tags>
                 </item>
                 <item>
-                    <name>WAN3 Traffic OUT</name>
-                    <type>1</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                    <multiplier>0</multiplier>
-                    <snmp_oid>.1.3.6.1.2.1.2.2.1.16.7</snmp_oid>
-                    <key>ifOutOctects.7</key>
-                    <delay>30</delay>
-                    <history>30</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units>Bps</units>
-                    <delta>1</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>0</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>Network</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
-                </item>
-                <item>
-                    <name>WAN4 Status</name>
-                    <type>1</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                    <multiplier>0</multiplier>
-                    <snmp_oid>.1.3.6.1.2.1.2.2.1.8.8</snmp_oid>
-                    <key>ifOperStatus.8</key>
-                    <delay>30</delay>
-                    <history>90</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>0</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>Network</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
-                </item>
-                <item>
+                    <uuid>ddbe89a7088b49bf911b0476df130f70</uuid>
                     <name>WAN4 Traffic IN</name>
-                    <type>1</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                    <multiplier>0</multiplier>
+                    <type>SNMP_AGENT</type>
                     <snmp_oid>.1.3.6.1.2.1.2.2.1.10.8</snmp_oid>
                     <key>ifInOctects.8</key>
                     <delay>30</delay>
-                    <history>30</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
+                    <history>30d</history>
                     <units>Bps</units>
-                    <delta>1</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>0</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>Network</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
+                    <preprocessing>
+                        <step>
+                            <type>CHANGE_PER_SECOND</type>
+                            <parameters>
+                                <parameter/>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Network</value>
+                        </tag>
+                    </tags>
                 </item>
                 <item>
+                    <uuid>2724f3100b464005b50aa3695d199aec</uuid>
+                    <name>LAN Status</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.2.2.1.8.1</snmp_oid>
+                    <key>ifOperStatus.1</key>
+                    <delay>30</delay>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Network</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>4d1e2e46cfe14a75baba2e7f80c2fba8</uuid>
+                            <expression>last(/Draytek_Vigor3300v/ifOperStatus.1)&lt;&gt;1</expression>
+                            <name>{HOSTNAME} LAN is down</name>
+                            <priority>HIGH</priority>
+                            <description>LAN port is down on 2820</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>da9c73a4567945dd86cf2dc2e7cc0756</uuid>
+                    <name>WAN1 Status</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.2.2.1.8.5</snmp_oid>
+                    <key>ifOperStatus.5</key>
+                    <delay>30</delay>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Network</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>dcf252f8a91c4bf5b07330707a290d32</uuid>
+                            <expression>last(/Draytek_Vigor3300v/ifOperStatus.5)&lt;&gt;1</expression>
+                            <name>{HOSTNAME} WAN1 is down</name>
+                            <priority>HIGH</priority>
+                            <description>WAN1 is down</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>dbb7c92f3e8848529cd9cec2339960f4</uuid>
+                    <name>WAN2 Status</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.2.2.1.8.6</snmp_oid>
+                    <key>ifOperStatus.6</key>
+                    <delay>30</delay>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Network</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>bf0ba509a5044baeaa7bca962d5c58bc</uuid>
+                            <expression>last(/Draytek_Vigor3300v/ifOperStatus.6)&lt;&gt;1</expression>
+                            <name>{HOSTNAME} WAN2 is down</name>
+                            <priority>HIGH</priority>
+                            <description>WAN2 is down</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>ecbf8bac27be4c3a9f0f99c8f94e33da</uuid>
+                    <name>WAN3 Status</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.2.2.1.8.7</snmp_oid>
+                    <key>ifOperStatus.7</key>
+                    <delay>30</delay>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Network</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>a419a74229214173ad9fc3683808199d</uuid>
+                            <expression>last(/Draytek_Vigor3300v/ifOperStatus.7)&lt;&gt;1</expression>
+                            <name>{HOSTNAME} WAN3 is down</name>
+                            <priority>HIGH</priority>
+                            <description>WAN3 is down</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>b9943e14425e428e8e46d6b39adf5916</uuid>
+                    <name>WAN4 Status</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.2.2.1.8.8</snmp_oid>
+                    <key>ifOperStatus.8</key>
+                    <delay>30</delay>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Network</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>987a8f8344b5483b9010061da449df98</uuid>
+                            <expression>last(/Draytek_Vigor3300v/ifOperStatus.8)&lt;&gt;1</expression>
+                            <name>{HOSTNAME} WAN4 is down</name>
+                            <priority>HIGH</priority>
+                            <description>WAN4 is down</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>0d8393d5e4384cb493ee65e8e13ebe10</uuid>
+                    <name>LAN Traffic OUT</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.2.2.1.16.1</snmp_oid>
+                    <key>ifOutOctects.1</key>
+                    <delay>30</delay>
+                    <history>30d</history>
+                    <units>Bps</units>
+                    <preprocessing>
+                        <step>
+                            <type>CHANGE_PER_SECOND</type>
+                            <parameters>
+                                <parameter/>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Network</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>bf9949cf88c94d1f8e175f8da2358ff3</uuid>
+                    <name>WAN1 Traffic OUT</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.2.2.1.16.5</snmp_oid>
+                    <key>ifOutOctects.5</key>
+                    <delay>30</delay>
+                    <history>30d</history>
+                    <units>Bps</units>
+                    <preprocessing>
+                        <step>
+                            <type>CHANGE_PER_SECOND</type>
+                            <parameters>
+                                <parameter/>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Network</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>ed3209bbb39b45bcaff6ceb1cba24f1a</uuid>
+                    <name>WAN2 Traffic OUT</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.2.2.1.16.6</snmp_oid>
+                    <key>ifOutOctects.6</key>
+                    <delay>30</delay>
+                    <history>30d</history>
+                    <units>Bps</units>
+                    <preprocessing>
+                        <step>
+                            <type>CHANGE_PER_SECOND</type>
+                            <parameters>
+                                <parameter/>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Network</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>2769d4b10b62403f8dcd9a8da564ab5e</uuid>
+                    <name>WAN3 Traffic OUT</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.2.2.1.16.7</snmp_oid>
+                    <key>ifOutOctects.7</key>
+                    <delay>30</delay>
+                    <history>30d</history>
+                    <units>Bps</units>
+                    <preprocessing>
+                        <step>
+                            <type>CHANGE_PER_SECOND</type>
+                            <parameters>
+                                <parameter/>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Network</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>e806216ace4045a180d3865a7252932a</uuid>
                     <name>WAN4 Traffic OUT</name>
-                    <type>1</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                    <multiplier>0</multiplier>
+                    <type>SNMP_AGENT</type>
                     <snmp_oid>.1.3.6.1.2.1.2.2.1.16.8</snmp_oid>
                     <key>ifOutOctects.8</key>
                     <delay>30</delay>
-                    <history>30</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
+                    <history>30d</history>
                     <units>Bps</units>
-                    <delta>1</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>0</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>Network</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
+                    <preprocessing>
+                        <step>
+                            <type>CHANGE_PER_SECOND</type>
+                            <parameters>
+                                <parameter/>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Network</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>502fafcab57e4bf4a0f7cc80270ef87b</uuid>
+                    <name>Uptime</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.1.3.0</snmp_oid>
+                    <key>sysUpTimeInstance</key>
+                    <delay>30</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>uptime</units>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.01</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>General</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>073ff78c9fca4c7faf44913a772e7434</uuid>
+                            <expression>last(/Draytek_Vigor3300v/sysUpTimeInstance)&lt;600</expression>
+                            <name>{HOSTNAME} has just been restarted</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
                 </item>
             </items>
-            <discovery_rules/>
-            <macros/>
-            <templates/>
-            <screens/>
         </template>
     </templates>
-    <triggers>
-        <trigger>
-            <expression>{Draytek_Vigor3300v:sysUpTimeInstance.last(0)}&lt;600</expression>
-            <name>{HOSTNAME} has just been restarted</name>
-            <url/>
-            <status>0</status>
-            <priority>1</priority>
-            <description/>
-            <type>0</type>
-            <dependencies/>
-        </trigger>
-        <trigger>
-            <expression>{Draytek_Vigor3300v:icmpping.max(90)}=0</expression>
-            <name>{HOSTNAME} is unreachable</name>
-            <url/>
-            <status>0</status>
-            <priority>5</priority>
-            <description/>
-            <type>0</type>
-            <dependencies/>
-        </trigger>
-        <trigger>
-            <expression>{Draytek_Vigor3300v:ifOperStatus.1.last(0)}#1</expression>
-            <name>{HOSTNAME} LAN is down</name>
-            <url/>
-            <status>0</status>
-            <priority>4</priority>
-            <description>LAN port is down on 2820</description>
-            <type>0</type>
-            <dependencies/>
-        </trigger>
-        <trigger>
-            <expression>{Draytek_Vigor3300v:ifOperStatus.5.last(0)}#1</expression>
-            <name>{HOSTNAME} WAN1 is down</name>
-            <url/>
-            <status>0</status>
-            <priority>4</priority>
-            <description>WAN1 is down</description>
-            <type>0</type>
-            <dependencies/>
-        </trigger>
-        <trigger>
-            <expression>{Draytek_Vigor3300v:ifOperStatus.6.last(0)}#1</expression>
-            <name>{HOSTNAME} WAN2 is down</name>
-            <url/>
-            <status>0</status>
-            <priority>4</priority>
-            <description>WAN2 is down</description>
-            <type>0</type>
-            <dependencies/>
-        </trigger>
-        <trigger>
-            <expression>{Draytek_Vigor3300v:ifOperStatus.7.last(0)}#1</expression>
-            <name>{HOSTNAME} WAN3 is down</name>
-            <url/>
-            <status>0</status>
-            <priority>4</priority>
-            <description>WAN3 is down</description>
-            <type>0</type>
-            <dependencies/>
-        </trigger>
-        <trigger>
-            <expression>{Draytek_Vigor3300v:ifOperStatus.8.last(0)}#1</expression>
-            <name>{HOSTNAME} WAN4 is down</name>
-            <url/>
-            <status>0</status>
-            <priority>4</priority>
-            <description>WAN4 is down</description>
-            <type>0</type>
-            <dependencies/>
-        </trigger>
-    </triggers>
     <graphs>
         <graph>
+            <uuid>2e93018b84eb4d3aa4e08f83d5042f86</uuid>
             <name>LAN Traffic</name>
             <width>800</width>
-            <height>200</height>
-            <yaxismin>0.0000</yaxismin>
-            <yaxismax>100.0000</yaxismax>
-            <show_work_period>1</show_work_period>
-            <show_triggers>1</show_triggers>
-            <type>0</type>
-            <show_legend>1</show_legend>
-            <show_3d>0</show_3d>
-            <percent_left>0.0000</percent_left>
-            <percent_right>95.0000</percent_right>
-            <ymin_type_1>0</ymin_type_1>
-            <ymax_type_1>0</ymax_type_1>
-            <ymin_item_1>0</ymin_item_1>
-            <ymax_item_1>0</ymax_item_1>
+            <percent_right>95</percent_right>
             <graph_items>
                 <graph_item>
-                    <sortorder>0</sortorder>
-                    <drawtype>1</drawtype>
+                    <drawtype>FILLED_REGION</drawtype>
                     <color>009900</color>
-                    <yaxisside>1</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
+                    <yaxisside>RIGHT</yaxisside>
                     <item>
                         <host>Draytek_Vigor3300v</host>
                         <key>ifOutOctects.1</key>
@@ -859,11 +457,8 @@
                 </graph_item>
                 <graph_item>
                     <sortorder>1</sortorder>
-                    <drawtype>0</drawtype>
                     <color>0000FF</color>
-                    <yaxisside>1</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
+                    <yaxisside>RIGHT</yaxisside>
                     <item>
                         <host>Draytek_Vigor3300v</host>
                         <key>ifInOctects.1</key>
@@ -872,30 +467,15 @@
             </graph_items>
         </graph>
         <graph>
+            <uuid>1131845bcaae4bc2a2075e901494f443</uuid>
             <name>Uptime</name>
             <width>800</width>
-            <height>200</height>
-            <yaxismin>0.0000</yaxismin>
-            <yaxismax>100.0000</yaxismax>
-            <show_work_period>1</show_work_period>
-            <show_triggers>0</show_triggers>
-            <type>0</type>
-            <show_legend>1</show_legend>
-            <show_3d>0</show_3d>
-            <percent_left>0.0000</percent_left>
-            <percent_right>0.0000</percent_right>
-            <ymin_type_1>0</ymin_type_1>
-            <ymax_type_1>0</ymax_type_1>
-            <ymin_item_1>0</ymin_item_1>
-            <ymax_item_1>0</ymax_item_1>
+            <show_triggers>NO</show_triggers>
             <graph_items>
                 <graph_item>
-                    <sortorder>0</sortorder>
-                    <drawtype>0</drawtype>
                     <color>00EEEE</color>
-                    <yaxisside>1</yaxisside>
-                    <calc_fnc>7</calc_fnc>
-                    <type>0</type>
+                    <yaxisside>RIGHT</yaxisside>
+                    <calc_fnc>ALL</calc_fnc>
                     <item>
                         <host>Draytek_Vigor3300v</host>
                         <key>sysUpTimeInstance</key>
@@ -904,177 +484,105 @@
             </graph_items>
         </graph>
         <graph>
+            <uuid>d429db0e062e4c2aad1d489ff8131344</uuid>
             <name>WAN1 Traffic</name>
             <width>800</width>
-            <height>200</height>
-            <yaxismin>0.0000</yaxismin>
-            <yaxismax>100.0000</yaxismax>
-            <show_work_period>1</show_work_period>
-            <show_triggers>1</show_triggers>
-            <type>0</type>
-            <show_legend>1</show_legend>
-            <show_3d>0</show_3d>
-            <percent_left>0.0000</percent_left>
-            <percent_right>90.0000</percent_right>
-            <ymin_type_1>0</ymin_type_1>
-            <ymax_type_1>0</ymax_type_1>
-            <ymin_item_1>0</ymin_item_1>
-            <ymax_item_1>0</ymax_item_1>
+            <percent_right>90</percent_right>
             <graph_items>
                 <graph_item>
-                    <sortorder>1</sortorder>
-                    <drawtype>0</drawtype>
-                    <color>3333FF</color>
-                    <yaxisside>1</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
-                    <item>
-                        <host>Draytek_Vigor3300v</host>
-                        <key>ifInOctects.5</key>
-                    </item>
-                </graph_item>
-                <graph_item>
-                    <sortorder>0</sortorder>
-                    <drawtype>1</drawtype>
+                    <drawtype>FILLED_REGION</drawtype>
                     <color>33FF33</color>
-                    <yaxisside>1</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
+                    <yaxisside>RIGHT</yaxisside>
                     <item>
                         <host>Draytek_Vigor3300v</host>
                         <key>ifOutOctects.5</key>
                     </item>
                 </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>3333FF</color>
+                    <yaxisside>RIGHT</yaxisside>
+                    <item>
+                        <host>Draytek_Vigor3300v</host>
+                        <key>ifInOctects.5</key>
+                    </item>
+                </graph_item>
             </graph_items>
         </graph>
         <graph>
+            <uuid>191bd9322807442b9beb0b25fa9a1a6d</uuid>
             <name>WAN2 Traffic</name>
             <width>800</width>
-            <height>200</height>
-            <yaxismin>0.0000</yaxismin>
-            <yaxismax>100.0000</yaxismax>
-            <show_work_period>1</show_work_period>
-            <show_triggers>1</show_triggers>
-            <type>0</type>
-            <show_legend>1</show_legend>
-            <show_3d>0</show_3d>
-            <percent_left>0.0000</percent_left>
-            <percent_right>90.0000</percent_right>
-            <ymin_type_1>0</ymin_type_1>
-            <ymax_type_1>0</ymax_type_1>
-            <ymin_item_1>0</ymin_item_1>
-            <ymax_item_1>0</ymax_item_1>
+            <percent_right>90</percent_right>
             <graph_items>
                 <graph_item>
-                    <sortorder>1</sortorder>
-                    <drawtype>0</drawtype>
-                    <color>3333FF</color>
-                    <yaxisside>1</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
-                    <item>
-                        <host>Draytek_Vigor3300v</host>
-                        <key>ifInOctects.6</key>
-                    </item>
-                </graph_item>
-                <graph_item>
-                    <sortorder>0</sortorder>
-                    <drawtype>1</drawtype>
+                    <drawtype>FILLED_REGION</drawtype>
                     <color>33FF33</color>
-                    <yaxisside>1</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
+                    <yaxisside>RIGHT</yaxisside>
                     <item>
                         <host>Draytek_Vigor3300v</host>
                         <key>ifOutOctects.6</key>
                     </item>
                 </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>3333FF</color>
+                    <yaxisside>RIGHT</yaxisside>
+                    <item>
+                        <host>Draytek_Vigor3300v</host>
+                        <key>ifInOctects.6</key>
+                    </item>
+                </graph_item>
             </graph_items>
         </graph>
         <graph>
+            <uuid>7b4bab594fe44c2488d501c46188d237</uuid>
             <name>WAN3 Traffic</name>
             <width>800</width>
-            <height>200</height>
-            <yaxismin>0.0000</yaxismin>
-            <yaxismax>100.0000</yaxismax>
-            <show_work_period>1</show_work_period>
-            <show_triggers>1</show_triggers>
-            <type>0</type>
-            <show_legend>1</show_legend>
-            <show_3d>0</show_3d>
-            <percent_left>0.0000</percent_left>
-            <percent_right>90.0000</percent_right>
-            <ymin_type_1>0</ymin_type_1>
-            <ymax_type_1>0</ymax_type_1>
-            <ymin_item_1>0</ymin_item_1>
-            <ymax_item_1>0</ymax_item_1>
+            <percent_right>90</percent_right>
             <graph_items>
                 <graph_item>
-                    <sortorder>1</sortorder>
-                    <drawtype>0</drawtype>
-                    <color>3333FF</color>
-                    <yaxisside>1</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
-                    <item>
-                        <host>Draytek_Vigor3300v</host>
-                        <key>ifInOctects.7</key>
-                    </item>
-                </graph_item>
-                <graph_item>
-                    <sortorder>0</sortorder>
-                    <drawtype>1</drawtype>
+                    <drawtype>FILLED_REGION</drawtype>
                     <color>33FF33</color>
-                    <yaxisside>1</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
+                    <yaxisside>RIGHT</yaxisside>
                     <item>
                         <host>Draytek_Vigor3300v</host>
                         <key>ifOutOctects.7</key>
                     </item>
                 </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>3333FF</color>
+                    <yaxisside>RIGHT</yaxisside>
+                    <item>
+                        <host>Draytek_Vigor3300v</host>
+                        <key>ifInOctects.7</key>
+                    </item>
+                </graph_item>
             </graph_items>
         </graph>
         <graph>
+            <uuid>5631310e7a254bdd84b6e84de9eba4cb</uuid>
             <name>WAN4 Traffic</name>
             <width>800</width>
-            <height>200</height>
-            <yaxismin>0.0000</yaxismin>
-            <yaxismax>100.0000</yaxismax>
-            <show_work_period>1</show_work_period>
-            <show_triggers>1</show_triggers>
-            <type>0</type>
-            <show_legend>1</show_legend>
-            <show_3d>0</show_3d>
-            <percent_left>0.0000</percent_left>
-            <percent_right>90.0000</percent_right>
-            <ymin_type_1>0</ymin_type_1>
-            <ymax_type_1>0</ymax_type_1>
-            <ymin_item_1>0</ymin_item_1>
-            <ymax_item_1>0</ymax_item_1>
+            <percent_right>90</percent_right>
             <graph_items>
                 <graph_item>
-                    <sortorder>1</sortorder>
-                    <drawtype>0</drawtype>
-                    <color>3333FF</color>
-                    <yaxisside>1</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
-                    <item>
-                        <host>Draytek_Vigor3300v</host>
-                        <key>ifInOctects.8</key>
-                    </item>
-                </graph_item>
-                <graph_item>
-                    <sortorder>0</sortorder>
-                    <drawtype>1</drawtype>
+                    <drawtype>FILLED_REGION</drawtype>
                     <color>33FF33</color>
-                    <yaxisside>1</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
+                    <yaxisside>RIGHT</yaxisside>
                     <item>
                         <host>Draytek_Vigor3300v</host>
                         <key>ifOutOctects.8</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>3333FF</color>
+                    <yaxisside>RIGHT</yaxisside>
+                    <item>
+                        <host>Draytek_Vigor3300v</host>
+                        <key>ifInOctects.8</key>
                     </item>
                 </graph_item>
             </graph_items>
