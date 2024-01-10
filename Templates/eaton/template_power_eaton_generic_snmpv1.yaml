@@ -1,0 +1,807 @@
+zabbix_export:
+  version: '6.0'
+  date: '2023-09-29T16:07:34Z'
+  groups:
+    - uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+  templates:
+    - uuid: eb8d1b2535cf463188ca0639db65bd64
+      template: 'Generic Eaton UPS'
+      name: 'Generic Eaton UPS'
+      description: |
+        Generic template for Eaton UPS devices.
+        
+        Tested with:
+        - Eaton 9PX
+        - Eaton Powerware
+      groups:
+        - name: Templates
+      items:
+        - uuid: 8bbd0537d41f40949fddfa462d73d7ca
+          name: 'Device reachability using ICMP'
+          type: SIMPLE
+          key: icmpping
+          delay: 5m
+          history: 1w
+          tags:
+            - tag: Application
+              value: Information(s)
+          triggers:
+            - uuid: db75c96624834ffba8ca914c0915690f
+              expression: 'max(/Generic Eaton UPS/icmpping,{$ICMP_QTD_LOST})=0'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'max(/Generic Eaton UPS/icmpping,{$ICMP_QTD_LOST})=1'
+              name: '{HOSTNAME} indisponível através de teste ICMP ping'
+              status: DISABLED
+              priority: HIGH
+              description: 'Last three attempts returned timeout.  Please check device connectivity.'
+              manual_close: 'YES'
+            - uuid: 34c99c58d4d74d9fb7fbf96ca7722dba
+              expression: 'max(/Generic Eaton UPS/icmpping,300s)<>1'
+              name: '{HOSTNAME} is UNREACHABLE or DOWN'
+              priority: DISASTER
+              manual_close: 'YES'
+        - uuid: 0aca5753c39e48baa9e26dbbd1e77bb2
+          name: 'ICMP loss'
+          type: SIMPLE
+          key: icmppingloss
+          delay: '60'
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          tags:
+            - tag: Application
+              value: Status
+          triggers:
+            - uuid: 6a69dc88c7d4442193103878bf3e1d6a
+              expression: 'min(/Generic Eaton UPS/icmppingloss,5m)>{$ICMP_LOSS_WARN} and min(/Generic Eaton UPS/icmppingloss,5m)<100'
+              name: 'High ICMP ping loss on  {HOSTNAME}'
+              status: DISABLED
+              priority: WARNING
+              dependencies:
+                - name: '{HOSTNAME} indisponível através de teste ICMP ping'
+                  expression: 'max(/Generic Eaton UPS/icmpping,{$ICMP_QTD_LOST})=0'
+                  recovery_expression: 'max(/Generic Eaton UPS/icmpping,{$ICMP_QTD_LOST})=1'
+        - uuid: 1b428f64497042ca83fda4d2a7d5c54f
+          name: 'ICMP response time'
+          type: SIMPLE
+          key: icmppingsec
+          delay: '60'
+          history: 1w
+          value_type: FLOAT
+          units: s
+          tags:
+            - tag: Application
+              value: Status
+          triggers:
+            - uuid: 792cbc79f6f34873bc82acd02967473b
+              expression: 'avg(/Generic Eaton UPS/icmppingsec,5m)>{$ICMP_RESPONSE_TIME_WARN}'
+              name: 'High ICMP ping response time on {HOSTNAME}'
+              status: DISABLED
+              priority: WARNING
+              dependencies:
+                - name: 'High ICMP ping loss on  {HOSTNAME}'
+                  expression: 'min(/Generic Eaton UPS/icmppingloss,5m)>{$ICMP_LOSS_WARN} and min(/Generic Eaton UPS/icmppingloss,5m)<100'
+        - uuid: d903f6a6926340b4a8498a82a83d585d
+          name: 'MAC Address'
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.2.1.2.2.1.6.2
+          key: MacAddress
+          delay: 5m
+          history: 7d
+          trends: '0'
+          value_type: CHAR
+          inventory_link: MACADDRESS_A
+          tags:
+            - tag: Application
+              value: Information(s)
+        - uuid: 5cc8212a19a44ee2b7ba492653de9ce1
+          name: Contact
+          type: SNMP_AGENT
+          snmp_oid: 'SNMPv2-MIB::sysContact.0'
+          key: sysContact
+          delay: 5m
+          trends: '0'
+          value_type: TEXT
+          inventory_link: CONTACT
+          tags:
+            - tag: Application
+              value: Information(s)
+        - uuid: 6cc795b76e6f40c49f2f4c4bd3c22b0d
+          name: Location
+          type: SNMP_AGENT
+          snmp_oid: 'SNMPv2-MIB::sysLocation.0'
+          key: sysLocation
+          delay: 5m
+          trends: '0'
+          value_type: CHAR
+          inventory_link: LOCATION
+          tags:
+            - tag: Application
+              value: Information(s)
+        - uuid: b1d539f200f34a7f967f298f3e5a1045
+          name: 'Device Name'
+          type: SNMP_AGENT
+          snmp_oid: 'SNMPv2-MIB::sysName.0'
+          key: sysName
+          delay: 5m
+          history: 7d
+          trends: '0'
+          value_type: TEXT
+          inventory_link: NAME
+          tags:
+            - tag: Application
+              value: Information(s)
+        - uuid: 7b096d785cf34afea6bb712c0cd16e9c
+          name: Uptime
+          type: SNMP_AGENT
+          snmp_oid: 'SNMPv2-MIB::sysUpTime.0'
+          key: sysUpTime
+          delay: 5m
+          history: 31d
+          units: s
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.01'
+          tags:
+            - tag: Application
+              value: Information(s)
+          triggers:
+            - uuid: 170b6b53c49a4d8286f52240385f5a40
+              expression: 'change(/Generic Eaton UPS/sysUpTime)<0'
+              name: '{HOSTNAME} has just been restarted'
+              priority: INFO
+        - uuid: d993fad6a4744603b69765976762098b
+          name: 'Internal Sensor - Temperature'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.534.1.6.1.0
+          key: upsEnvAmbientTemp
+          delay: 5m
+          history: 14d
+          trends: 30d
+          units: C
+          tags:
+            - tag: Application
+              value: Status
+        - uuid: 4e5876b89620448cb4d5299a9c8b2830
+          name: 'Serial Number'
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.4.1.705.1.1.7.0
+          key: UpsmgIdentSerialNumber
+          delay: 5m
+          history: 14d
+          trends: '0'
+          value_type: TEXT
+          inventory_link: SERIALNO_A
+          tags:
+            - tag: Application
+              value: SerialNumber
+        - uuid: 6fe9eb53f0514f35b6b9e3b812748f8d
+          name: Alarm(s)
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.4.1.534.1.7.1.0
+          key: xupsAlarms
+          delay: 5m
+          history: 14d
+          trends: 30d
+          tags:
+            - tag: Application
+              value: Information(s)
+          triggers:
+            - uuid: 018ac4e8310f4ea89aeb9bb5c2dcdc01
+              expression: 'last(/Generic Eaton UPS/xupsAlarms)>0'
+              name: '{HOSTNAME} detected alarm(s)'
+              priority: AVERAGE
+        - uuid: 3f7dbf98d2fc4235845e696933aa27e5
+          name: 'Battery capacity'
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.4.1.534.1.2.4.0
+          key: xupsBatCapacity
+          delay: 5m
+          history: 14d
+          trends: 30d
+          units: '%'
+          tags:
+            - tag: Application
+              value: Battery
+        - uuid: b7b39c6a1b3d4c8e9d3854558aaf2707
+          name: 'Battery current'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.534.1.2.3.0
+          key: xupsBatCurrent
+          delay: 5m
+          history: 14d
+          trends: 30d
+          value_type: FLOAT
+          units: A
+          tags:
+            - tag: Application
+              value: Battery
+        - uuid: 0bae230f2b5d4f7f919d5f0c7014d3c0
+          name: 'Battery status'
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.4.1.534.1.2.5.0
+          key: xupsBatteryAbmStatus
+          delay: 5m
+          valuemap:
+            name: xupsBatteryAbmStatus
+          tags:
+            - tag: Application
+              value: Battery
+        - uuid: 2087ce6542f2451aa09c16b5b94ddb5e
+          name: 'Time running on batteries'
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.2.1.33.1.2.2.0
+          key: xupsBatTimeOnBattery
+          delay: 5m
+          history: 7d
+          trends: 30d
+          value_type: FLOAT
+          units: s
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.01'
+          tags:
+            - tag: Application
+              value: Battery
+        - uuid: 9541a53dec764228814e44a33bef57e3
+          name: 'Battery time remaining'
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.4.1.534.1.2.1.0
+          key: xupsBatTimeRemaining
+          delay: 5m
+          history: 14d
+          trends: 30d
+          value_type: FLOAT
+          units: s
+          tags:
+            - tag: Application
+              value: Battery
+          triggers:
+            - uuid: ab465a343e07464e9c4684c489f8ec30
+              expression: 'last(/Generic Eaton UPS/xupsBatTimeRemaining)<300'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: |
+                last(/Generic Eaton UPS/xupsBatTimeRemaining)>300
+                and
+                last(/Generic Eaton UPS/xupsBatTimeRemaining)<600
+              name: '{HOSTNAME} Battery time remaining is CRITICAL'
+              priority: DISASTER
+              manual_close: 'YES'
+            - uuid: d62fd62bc9684b6da58ef0b161fffa47
+              expression: |
+                last(/Generic Eaton UPS/xupsBatTimeRemaining)>300 
+                and
+                last(/Generic Eaton UPS/xupsBatTimeRemaining)<600
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'last(/Generic Eaton UPS/xupsBatTimeRemaining)>600'
+              name: '{HOSTNAME} Battery time remaining is LOW'
+              priority: HIGH
+        - uuid: fbc2f726cb124a518d875260eb498b53
+          name: 'Battery voltage'
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.4.1.534.1.2.2.0
+          key: xupsBatVoltage
+          delay: 5m
+          history: 14d
+          trends: 30d
+          units: V
+          tags:
+            - tag: Application
+              value: Battery
+        - uuid: 6e1dfedb99764f958a0c400b02f3db7e
+          name: 'Bypass Frequency'
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.4.1.534.1.5.1.0
+          key: xupsBypassFrequency
+          delay: 5m
+          history: 14d
+          trends: 30d
+          units: Hz
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+          tags:
+            - tag: Application
+              value: Bypass
+        - uuid: e5eab5494e534df19518765046567b18
+          name: 'Bypas voltage on phase 1'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.534.1.5.3.1.2.1
+          key: xupsBypassVoltage1
+          delay: 5m
+          history: 7d
+          units: V
+          tags:
+            - tag: Application
+              value: Bypass
+        - uuid: 74f4e1414cff4ef69bf3a714ae8f4fb3
+          name: 'External Sensor - Humidity'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.534.1.6.6.0
+          key: xupsEnvRemoteHumidity
+          delay: 5m
+          history: 14d
+          trends: 30d
+          units: '%'
+          tags:
+            - tag: Application
+              value: Status
+          triggers:
+            - uuid: c844a152a4504675b2babcc537b3c118
+              expression: 'last(/Generic Eaton UPS/xupsEnvRemoteHumidity)<45'
+              name: 'Humidity < 45% in {HOSTNAME}'
+              priority: AVERAGE
+            - uuid: dd202996c3e247b18a227901a2285cce
+              expression: 'last(/Generic Eaton UPS/xupsEnvRemoteHumidity)>55'
+              name: 'Humidity > 55% in {HOSTNAME}'
+              priority: AVERAGE
+        - uuid: db5b6dcbc1d74b539fb9e6d7ee3518da
+          name: 'External Sensor - Temperature'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.534.1.6.5.0
+          key: xupsEnvRemoteTemp
+          delay: 5m
+          history: 14d
+          trends: 30d
+          units: C
+          tags:
+            - tag: Application
+              value: Status
+          triggers:
+            - uuid: 5fc03693b129434899a1142199f65500
+              expression: 'last(/Generic Eaton UPS/xupsEnvRemoteTemp)<16'
+              name: 'External temperature < 16ºC in {HOSTNAME}'
+              priority: HIGH
+            - uuid: 92cef0a82c214c609706e6e3fad52c26
+              expression: 'last(/Generic Eaton UPS/xupsEnvRemoteTemp)>30'
+              name: 'External temperature > 30 ºC in {HOSTNAME}'
+              priority: HIGH
+        - uuid: 2823f203a01d405c839311080c00ec57
+          name: 'Device Manufacter Name'
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.4.1.534.1.1.1.0
+          key: xupsIdentManufacturer
+          delay: 5m
+          history: 7d
+          trends: '0'
+          value_type: TEXT
+          inventory_link: VENDOR
+          tags:
+            - tag: Application
+              value: Information(s)
+        - uuid: 83ac2ea9eee54c4cb06ef3b8dd3c04f6
+          name: 'Device Model Name'
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.4.1.534.1.1.2.0
+          key: xupsIdentModel
+          delay: 5m
+          history: 14d
+          trends: '0'
+          value_type: TEXT
+          inventory_link: CHASSIS
+          tags:
+            - tag: Application
+              value: Information(s)
+        - uuid: 454efe3dcb40449283afddd788f00224
+          name: 'Input current on phase 1'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.534.1.3.4.1.3.1
+          key: xupsInputCurrent1
+          delay: 5m
+          history: 7d
+          units: A
+          tags:
+            - tag: Application
+              value: Input
+        - uuid: 61a02dce88d94cd181e9bf65b3a21dd7
+          name: 'Input frequency'
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.4.1.534.1.3.1.0
+          key: xupsInputFrequency
+          delay: 5m
+          history: 14d
+          trends: 30d
+          units: Hz
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+          tags:
+            - tag: Application
+              value: Input
+        - uuid: 67962006dcf348f8b2254b1f60880dd8
+          name: 'Number of deviations from normal frequency or voltage'
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.4.1.534.1.3.2.0
+          key: xupsInputLineBads
+          delay: 5m
+          history: 14d
+          trends: 30d
+          tags:
+            - tag: Application
+              value: Input
+        - uuid: a74700e087124f0099a3242504e276aa
+          name: 'Input power on phase 1'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.534.1.3.4.1.4.1
+          key: xupsInputPower1
+          delay: 5m
+          history: 7d
+          units: Watt
+          tags:
+            - tag: Application
+              value: Input
+        - uuid: da86f2e9019d4433b35f77a3ae014d10
+          name: 'Input source'
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.4.1.534.1.3.5.0
+          key: xupsInputSource
+          delay: 5m
+          history: 14d
+          trends: 30d
+          valuemap:
+            name: xupsInputSource
+          tags:
+            - tag: Application
+              value: Input
+          triggers:
+            - uuid: 83a1944740e2486d8edcafb7c185359a
+              expression: 'last(/Generic Eaton UPS/xupsInputSource)<3'
+              name: '{HOSTNAME} input source failure'
+              priority: DISASTER
+              manual_close: 'YES'
+            - uuid: 4df7788c8d5b421a84d8ae688ed39239
+              expression: 'last(/Generic Eaton UPS/xupsInputSource)=4'
+              name: '{HOSTNAME} on bypass'
+              priority: AVERAGE
+              manual_close: 'YES'
+        - uuid: 08da3ae4d78b4b2eb9ca04808e83d1bd
+          name: 'Input voltage on phase 1'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.534.1.3.4.1.2.1
+          key: xupsInputVoltage1
+          delay: 5m
+          history: 7d
+          units: V
+          tags:
+            - tag: Application
+              value: Input
+        - uuid: bdca827cc5c44227aec2a71b1c0300b0
+          name: 'Output current on phase 1'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.534.1.4.4.1.3.1
+          key: xupsOutputCurrent1
+          delay: 5m
+          history: 7d
+          units: A
+          tags:
+            - tag: Application
+              value: Output
+        - uuid: 6fec4ccc27854b9e8b8ad148b9ae8fa7
+          name: 'Output frequency'
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.4.1.534.1.4.2.0
+          key: xupsOutputFrequency
+          delay: 5m
+          history: 7d
+          units: Hz
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+          tags:
+            - tag: Application
+              value: Output
+        - uuid: 96cb62fc29e54423a72325fc26f64eeb
+          name: 'Output power source'
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.4.1.534.1.4.5.0
+          key: xupsOutputSource
+          delay: 5m
+          history: 7d
+          valuemap:
+            name: xupsOutputSource
+          tags:
+            - tag: Application
+              value: Output
+          triggers:
+            - uuid: 014f02f5c60043849586ed99e9a8321f
+              expression: 'last(/Generic Eaton UPS/xupsOutputSource)=4'
+              name: '{HOSTNAME} on automatic bypass'
+              priority: WARNING
+            - uuid: 7b332e278f444c75825bd82b2ef32158
+              expression: 'last(/Generic Eaton UPS/xupsOutputSource)=5'
+              name: '{HOSTNAME} on battery'
+              priority: HIGH
+            - uuid: 0204bb08e032499dbea10e6611dc5eca
+              expression: 'last(/Generic Eaton UPS/xupsOutputSource)=11'
+              name: '{HOSTNAME} on manual bypass'
+              priority: INFO
+        - uuid: 1badff555ab5445b8a301a95a8802702
+          name: 'Output voltage on phase 1'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.534.1.4.4.1.2.1
+          key: xupsOutputVoltage1
+          delay: 5m
+          history: 7d
+          units: V
+          tags:
+            - tag: Application
+              value: Output
+        - uuid: 01e5914bd05d466784a6835d288a7596
+          name: 'Output power on phase 1'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.534.1.4.4.1.3.1
+          key: xupsOutputWatts1
+          delay: 5m
+          history: 7d
+          units: Watt
+          tags:
+            - tag: Application
+              value: Output
+        - uuid: 15adfb51e6474139ac0e1d190796fcb9
+          name: 'Battery test status'
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.4.1.534.1.8.2.0
+          key: xupsTestBatteryStatus
+          delay: 5m
+          history: 14d
+          trends: 30d
+          valuemap:
+            name: xupsTestBatteryStatus
+          tags:
+            - tag: Application
+              value: Information(s)
+          triggers:
+            - uuid: 1eef95f5f7e947638d58cdd3f08ef7be
+              expression: 'last(/Generic Eaton UPS/xupsTestBatteryStatus)=3'
+              name: 'Battery test FAILED on {HOSTNAME}'
+              priority: HIGH
+      discovery_rules:
+        - uuid: ddf2b4a0c651460593ab77ce272ce7dc
+          name: Bypass
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.534.1.5.3.1.1.1
+          key: xupsBypassPhase
+          delay: '300'
+          status: DISABLED
+          item_prototypes:
+            - uuid: 0e2db1a59e9647d2b6008a7ddc167452
+              name: 'Bypas voltage on phase $1'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.534.1.5.3.1.2.{#SNMPINDEX}'
+              key: 'xupsBypassVoltage[{#SNMPVALUE}]'
+              delay: '300'
+              tags:
+                - tag: Application
+                  value: Bypass
+        - uuid: ab706909fd3f427aae1f4da1b6ce48e1
+          name: Input
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.4.1.534.1.3.4.1.1.1
+          key: xupsInputPhase
+          delay: '300'
+          status: DISABLED
+          item_prototypes:
+            - uuid: 8b6ecb4813104d54850b9da815055bc0
+              name: 'Input current on phase $1'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.534.1.3.4.1.3.{#SNMPINDEX}'
+              key: 'xupsInputCurrent[{#SNMPVALUE}]'
+              delay: '300'
+              units: A
+              tags:
+                - tag: Application
+                  value: Input
+            - uuid: c301984fb4a3405b93bf965c0469f565
+              name: 'Input power on phase $1'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.534.1.3.4.1.4.{#SNMPINDEX}'
+              key: 'xupsInputPower[{#SNMPVALUE}]'
+              delay: '300'
+              units: Watt
+              tags:
+                - tag: Application
+                  value: Input
+            - uuid: 19358b467c5846e1a3572aa469986c91
+              name: 'Input voltage on phase $1'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.534.1.3.4.1.2.{#SNMPINDEX}'
+              key: 'xupsInputVoltage[{#SNMPVALUE}]'
+              delay: '300'
+              units: V
+              tags:
+                - tag: Application
+                  value: Input
+        - uuid: d042ce2f4374499493e8b39a4e805895
+          name: Output
+          type: SNMP_AGENT
+          snmp_oid: iso.3.6.1.4.1.534.1.4.4.1.1.1
+          key: xupsOutputPhase
+          status: DISABLED
+          item_prototypes:
+            - uuid: f7c058fa168c4385b40915f4af04b93f
+              name: 'Output current on phase $1'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.534.1.4.4.1.3.{#SNMPINDEX}'
+              key: 'xupsOutputCurrent[{#SNMPVALUE}]'
+              delay: '300'
+              units: A
+              tags:
+                - tag: Application
+                  value: Output
+            - uuid: aa67a683a598484c97f6ec506ab4d57c
+              name: 'Output voltage on phase $1'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.534.1.4.4.1.2.{#SNMPINDEX}'
+              key: 'xupsOutputVoltage[{#SNMPVALUE}]'
+              delay: '300'
+              units: V
+              tags:
+                - tag: Application
+                  value: Output
+            - uuid: 4ad17b4ed07c44ef870879582b528de4
+              name: 'Output power on phase $1'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.534.1.4.4.1.3.{#SNMPINDEX}'
+              key: 'xupsOutputWatts[{#SNMPVALUE}]'
+              delay: '300'
+              units: Watt
+              tags:
+                - tag: Application
+                  value: Output
+      tags:
+        - tag: Application
+          value: Battery
+        - tag: Application
+          value: Bypass
+        - tag: Application
+          value: Information(s)
+        - tag: Application
+          value: Input
+        - tag: Application
+          value: Output
+      macros:
+        - macro: '{$ICMP_LOSS_WARN}'
+          value: '20'
+        - macro: '{$ICMP_RESPONSE_TIME_WARN}'
+          value: '0.15'
+      valuemaps:
+        - uuid: f870f083000141848f877fa50de0a17e
+          name: xupsBatteryAbmStatus
+          mappings:
+            - value: '1'
+              newvalue: 'Battery charging'
+            - value: '2'
+              newvalue: 'Battery discharging'
+            - value: '3'
+              newvalue: 'Battery floating'
+            - value: '4'
+              newvalue: 'Battery resting'
+            - value: '5'
+              newvalue: Unknown
+        - uuid: 8a4435f08b644f23a3f9dec9cd37388a
+          name: xupsInputSource
+          mappings:
+            - value: '1'
+              newvalue: Other
+            - value: '2'
+              newvalue: None
+            - value: '3'
+              newvalue: 'Primary Utility'
+            - value: '4'
+              newvalue: 'Bypass Feed'
+            - value: '5'
+              newvalue: 'Secondary Utility'
+            - value: '6'
+              newvalue: Generator
+            - value: '7'
+              newvalue: 'Fly wheel'
+            - value: '8'
+              newvalue: 'Fuel cell'
+        - uuid: 5a53d2999cbf47a0aac2abbba07d78a3
+          name: xupsOutputSource
+          mappings:
+            - value: '1'
+              newvalue: Other
+            - value: '2'
+              newvalue: None
+            - value: '3'
+              newvalue: Normal
+            - value: '4'
+              newvalue: Bypass
+            - value: '5'
+              newvalue: Battery
+            - value: '6'
+              newvalue: Booster
+            - value: '7'
+              newvalue: Reducer
+            - value: '8'
+              newvalue: 'Parallel capacity'
+            - value: '9'
+              newvalue: 'Parallel redundant'
+            - value: '10'
+              newvalue: 'High efficiency mode'
+            - value: '11'
+              newvalue: 'Maintenance bypass'
+        - uuid: 2a48132513624406ba39e00194fe96e4
+          name: xupsTestBatteryStatus
+          mappings:
+            - value: '1'
+              newvalue: Unknown
+            - value: '2'
+              newvalue: Passed
+            - value: '3'
+              newvalue: Failed
+            - value: '4'
+              newvalue: 'In progress'
+            - value: '5'
+              newvalue: 'Not supported'
+            - value: '6'
+              newvalue: Inhibited
+            - value: '7'
+              newvalue: Scheduled
+  triggers:
+    - uuid: b3e971f31848412880c814c74275d02a
+      expression: |
+        last(/Generic Eaton UPS/xupsBatCurrent)<0
+        and
+        last(/Generic Eaton UPS/xupsBatteryAbmStatus)=2
+      name: 'Battery is discharging on {HOSTNAME}'
+      priority: AVERAGE
+  graphs:
+    - uuid: 00769346221a49b486927e06bf270dbd
+      name: 'Battery capacity'
+      graph_items:
+        - drawtype: GRADIENT_LINE
+          color: 4000FF
+          calc_fnc: ALL
+          item:
+            host: 'Generic Eaton UPS'
+            key: xupsBatCapacity
+    - uuid: ea7549b3cfc4484abb5f832bcec5bbbc
+      name: 'Battery time remaining'
+      graph_items:
+        - drawtype: GRADIENT_LINE
+          color: 4000FF
+          calc_fnc: ALL
+          item:
+            host: 'Generic Eaton UPS'
+            key: xupsBatTimeRemaining
+    - uuid: 67473a4b7f7f445cae974d12d9ea6a69
+      name: 'External Sensors'
+      graph_items:
+        - color: FF4000
+          calc_fnc: ALL
+          item:
+            host: 'Generic Eaton UPS'
+            key: xupsEnvRemoteTemp
+        - sortorder: '1'
+          drawtype: GRADIENT_LINE
+          color: 0080FF
+          calc_fnc: ALL
+          item:
+            host: 'Generic Eaton UPS'
+            key: xupsEnvRemoteHumidity
+    - uuid: df95116c26ad4f1a9404cf07493bb6db
+      name: 'Number of deviations from normal frequency or voltage'
+      graph_items:
+        - drawtype: BOLD_LINE
+          color: FF0000
+          calc_fnc: ALL
+          item:
+            host: 'Generic Eaton UPS'
+            key: xupsInputLineBads
+    - uuid: 70546331d7fa4bd3bbf3c5531e90e27d
+      name: 'UPS Temperature'
+      graph_items:
+        - drawtype: GRADIENT_LINE
+          color: D32F2F
+          calc_fnc: ALL
+          item:
+            host: 'Generic Eaton UPS'
+            key: upsEnvAmbientTemp
